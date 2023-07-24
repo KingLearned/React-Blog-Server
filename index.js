@@ -1,0 +1,77 @@
+import cors from 'cors'
+import authRoutes from './Routes/Auth.js'
+import postRoutes from './Routes/Posts.js'
+import cookieParser from 'cookie-parser'
+import MULTER from 'multer'
+import express from 'express'
+import session from 'express-session'
+
+const app = express()
+
+app.use(express.json())
+app.use(cookieParser())
+app.use(
+    session({
+        secret: '13254',
+        resave: false,
+        saveUninitialized: true,
+        cookie: {
+            secure:false,
+            httpOnly:true,
+            maxAge: 24 * 60 * 60 * 1000
+        }
+    })
+)
+
+
+app.use(cors({
+    origin: '*'
+}));
+
+const newsImgStorage = MULTER.diskStorage({
+    destination: '../Client/public/uploads',
+
+    filename(req, file, cb){
+        cb(null, file.originalname)
+        // cb(null, Date.now()+file.originalname)
+    }
+})
+
+
+const upload = MULTER({ storage:newsImgStorage })
+
+
+// const upload = multer({dest:'./uploads/'})
+app.post('/server/upload', upload.single('file'), function (req, res){
+    if(req.file){
+        const newsImg = req.file
+        res.status(200).json(newsImg.filename)
+    } 
+})
+
+// const Cache = MULTER.diskStorage({
+//     destination: '../Client/public/cacheImages',
+
+//     filename(req, file, cb){
+//         cb(null, file.originalname)
+//         // cb(null, Date.now()+file.originalname)
+//     }
+// })
+
+// const cacheImg = MULTER({ storage:Cache })
+
+// app.post('/server/imgcache', cacheImg.single('file'), function (req, res){
+//     if(req.file){
+//         const newsImg = req.file
+//         res.status(200).json(newsImg.filename)
+//     } 
+// })
+
+
+app.use("/server/auth", authRoutes)
+app.use("/server/posts", postRoutes)
+
+
+app.listen(8800, () => {
+    console.log('Server Running')
+})
