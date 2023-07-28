@@ -15,13 +15,14 @@ export const register = (req, res) => {
         const q = 'INSERT INTO authors(`username`, `email`, `pwd`) VALUES(?)'
         DB.query(q, [values], (err, data) => {
             if(err){
-                const nameExist = err.sqlMessage ==   `Duplicate entry '${req.body.username}' for key 'username'` && 'Username already exist!'
-                const emailExist = err.sqlMessage ==   `Duplicate entry '${req.body.email}' for key 'email'` && 'Email already exist!'
+                const nameExist = err.sqlMessage ==   `Duplicate entry '${req.body.username}' for key 'authors.username'` && 'Username already exist!'
+                const emailExist = err.sqlMessage ==   `Duplicate entry '${req.body.email}' for key 'authors.email'` && 'Email already exist!'
                 const errMsg = nameExist || emailExist
+
                 res.json({Error:errMsg})
             }
             if(!err){
-                return res.json('Registered Successfully')
+                return res.json({success:'Registered Succefully!'})
             }
         })
 
