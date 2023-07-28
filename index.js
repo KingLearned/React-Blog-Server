@@ -33,15 +33,11 @@ const newsImgStorage = MULTER.diskStorage({
 
     filename(req, file, cb){
         cb(null, file.originalname)
-        // cb(null, Date.now()+file.originalname)
     }
 })
 
-
 const upload = MULTER({ storage:newsImgStorage })
 
-
-// const upload = multer({dest:'./uploads/'})
 app.post('/server/upload', upload.single('file'), function (req, res){
     if(req.file){
         const newsImg = req.file
@@ -49,23 +45,24 @@ app.post('/server/upload', upload.single('file'), function (req, res){
     } 
 })
 
-// const Cache = MULTER.diskStorage({
-//     destination: '../Client/public/cacheImages',
 
-//     filename(req, file, cb){
-//         cb(null, file.originalname)
-//         // cb(null, Date.now()+file.originalname)
-//     }
-// })
 
-// const cacheImg = MULTER({ storage:Cache })
+const ImgCache = MULTER.diskStorage({
+    destination: '../Client/public/cacheImages',
 
-// app.post('/server/imgcache', cacheImg.single('file'), function (req, res){
-//     if(req.file){
-//         const newsImg = req.file
-//         res.status(200).json(newsImg.filename)
-//     } 
-// })
+    filename(req, file, cb){
+        cb(null, file.originalname)
+    }
+})
+
+const cacheImg = MULTER({ storage:ImgCache })
+
+app.post('/server/imgpreview', cacheImg.single('cache'), function (req, res){
+    if(req.file){
+        const Img = req.file
+        res.status(200).json(Img.filename)
+    } 
+})
 
 
 app.use("/server/auth", authRoutes)
