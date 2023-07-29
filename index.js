@@ -4,7 +4,7 @@ import postRoutes from './Routes/Posts.js'
 import cookieParser from 'cookie-parser'
 import MULTER from 'multer'
 import express from 'express'
-// import session from 'express-session'
+import session from 'express-session'
 
 const app = express()
 
