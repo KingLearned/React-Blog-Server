@@ -1,28 +1,13 @@
+import express from 'express'
 import cors from 'cors'
 import authRoutes from './Routes/Auth.js'
 import postRoutes from './Routes/Posts.js'
-import cookieParser from 'cookie-parser'
 import MULTER from 'multer'
-import express from 'express'
-import session from 'express-session'
-
 const app = express()
 
 
+
 app.use(express.json())
-app.use(cookieParser())
-app.use(
-    session({
-        secret: '13254',
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            secure:false,
-            httpOnly:true,
-            maxAge: 24 * 60 * 60 * 1000
-        }
-    })
-)
 
 app.use(cors({
     origin: '*'
@@ -48,8 +33,6 @@ app.post('/server/upload', upload.single('file'), function (req, res){
     } 
 })
 
-
-
 const ImgCache = MULTER.diskStorage({
     destination: '../../React-Blog-Project/Client/public/cacheImages',
 
@@ -67,9 +50,6 @@ app.post('/server/imgpreview', cacheImg.single('cache'), function (req, res){
         res.status(200).json(Img.filename)
     } 
 })
-
-
-
 
 app.get('/', (req,res) => {
     res.send('Hello World')
