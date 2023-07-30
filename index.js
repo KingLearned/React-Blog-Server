@@ -8,6 +8,7 @@ import session from 'express-session'
 
 const app = express()
 
+
 app.use(express.json())
 app.use(cookieParser())
 app.use(
@@ -23,10 +24,12 @@ app.use(
     })
 )
 
-
 app.use(cors({
     origin: '*'
 }));
+
+app.use("/server/auth", authRoutes)
+app.use("/server/posts", postRoutes)
 
 const newsImgStorage = MULTER.diskStorage({
     destination: '../Client/public/uploads',
@@ -66,8 +69,11 @@ app.post('/server/imgpreview', cacheImg.single('cache'), function (req, res){
 })
 
 
-app.use("/server/auth", authRoutes)
-app.use("/server/posts", postRoutes)
+
+
+app.get('/', (req,res) => {
+    res.send('Hello World')
+})
 
 
 app.listen(8800, () => {
