@@ -18,13 +18,13 @@ app.use(cors({
 app.use("/server/posts", postRoutes)
 app.use("/server/auth", authRoutes)
 
-const newsImgStorage = MULTER.diskStorage({
-    destination: '../Client/public/uploads',
+// const newsImgStorage = MULTER.diskStorage({
+//     destination: '../Client/public/uploads',
 
-    filename(req, file, cb){
-        cb(null, file.originalname)
-    }
-})
+//     filename(req, file, cb){
+//         cb(null, file.originalname)
+//     }
+// })
 
 // const upload = MULTER({ storage:newsImgStorage })
 
