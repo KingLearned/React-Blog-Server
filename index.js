@@ -9,7 +9,6 @@ const app = express()
 
 const apiKey = '0074d8a2662e7782495369b57eb4de049c4fee6eb6bcf5197b5a276a7123540252e293c317724b370785f9056d0faef3580d0048a5616d9c9cf7bcc29127f6ace652aa45f14cd340213c072a0150cd41039d4680282ad31a6b5b6f7a6fb40deb653f9c976b3df6f4d77906f442ced14564dbef114e9358a3ca0eff7ac11658d6'
 
-
 const client = new appwriteSDK.Client()
 const storage = new appwriteSDK.Storage(client)
 
@@ -38,6 +37,7 @@ app.post('/server/imgpreview', cacheImg.single('cache'), (req, res) => {
         const ID = Img.originalname.replace(/[^a-z^A-Z]/g, '').length > 20 ? Img.originalname.replace(/[^a-z^A-Z]/g, '').slice(0,20) : Img.originalname.replace(/[^a-z^A-Z]/g, '')
 
         const promise = storage.createFile('cacheBucket', ID, appwriteSDK.InputFile.fromBuffer(Img.buffer, Img.originalname))
+        
         promise.then(function (response) {
             res.json(response.$id)
         }, function (error) {

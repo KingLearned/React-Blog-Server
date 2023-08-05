@@ -66,19 +66,13 @@ export const updatePost = (req, res) => {
 }
 
 export const deletePost = (req, res) => {
-    const token = req.cookies.access_token
-    if(!token) return res.status(401).json("Not authenticated!")
+    const postId = req.params.id
+    const q = 'DELETE FROM posts WHERE posts.postId=?'
 
-    jwt.verify(token, "jwkey", (err, userInfo) => {
-        if(err) return res.status(403).json("Token is not Valid!")
-
-        const postId = req.params.id
-        const q = 'SELECT * FROM posts WHERE `Id`=? AND `uid`=?'
-        DB.query(q,[postId,userInfo.id], (err,data) => {
-            if(err) return res.status(403).json("You can delete only your post!")
-
-            return res.json("Post has been deleted")
-        })
+    DB.query(q, postId, (err,data) => {
+        if(err) return console.log(err)
+        
+        if(data) return res.json("Post has been deleted")
     })
     
 }
